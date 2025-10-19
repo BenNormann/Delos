@@ -1,69 +1,122 @@
-# TruthCheck Browser Extension
+# Delos - Making Truth Visible
 
-A fact-checking browser extension that analyzes and scores claims in news articles using AI, scholarly sources, and web reinforcement.
+An AI-powered fact-checking browser extension that automatically analyzes news articles, extracts factual claims, and scores them for credibility using multi-dimensional verification across AI analysis, academic sources, and cross-spectrum web validation.
 
-## Features
+## ✨ Features
 
-- **Automatic Claim Extraction**: Identifies factual claims in news articles
-- **AI-Powered Classification**: Categorizes claims as current news, general knowledge, or empirical facts
-- **Multi-Dimensional Scoring**: Evaluates claims using 4 dimensions:
-  - AI Credibility Rating
-  - Tone Analysis (bias detection)
-  - Scholarly Match (academic sources)
-  - Web Reinforcement (cross-referencing)
-- **Visual Highlighting**: Color-coded highlights based on trust scores
-  - 🟢 Green: High trust (≥7/10)
-  - 🟡 Yellow: Medium trust (3-7/10)
-  - 🔴 Red: Low trust (<3/10)
-- **Interactive Tooltips**: Detailed score breakdowns on hover
+### 🎯 Intelligent Claim Detection
+- **Research-Based Extraction**: Uses linguistic analysis and argumentation mining principles to identify check-worthy claims
+- **Smart Filtering**: Automatically removes UI noise, navigation elements, and non-factual content
+- **Quote Preservation**: Intelligently handles multi-sentence quotes and attributions
 
-## Installation
+### 🧠 Multi-Dimensional Scoring System
+Every claim is evaluated across **4 independent dimensions**:
+
+1. **AI Credibility Rating** (0-10)
+   - Logical consistency and plausibility analysis
+   - Verifiability assessment using GPT-4o-mini
+
+2. **Tone Analysis** (0-10)
+   - Detects emotional language and bias
+   - Identifies loaded terms and propaganda techniques
+
+3. **Scholarly Match** (0-10)
+   - Searches Google Scholar for academic backing
+   - Prioritizes authoritative domains (.edu, .nih.gov, nature.com)
+   - Only applies to empirical/scientific claims
+
+4. **Web Reinforcement** (0-10)
+   - Cross-verifies claims across independent news sources
+   - **Political Spectrum Analysis**: Rewards claims verified across left, center, and right-leaning sources
+   - Detects potential echo chambers
+
+### 🎨 Visual Feedback
+- **Color-Coded Highlights**:
+  - 🟢 **Green** (≥7/10): High trust - Well-verified claim
+  - 🟡 **Yellow** (3-7/10): Medium trust - Requires further verification
+  - 🔴 **Red** (<3/10): Low trust - Questionable or unverified
+
+- **Interactive Tooltips**: Hover to see score breakdown and classification
+- **Source Bibliography**: Click any claim to see full sources with political spectrum visualization
+
+### 📊 Claim Classification
+Claims are automatically categorized:
+- **📰 Current News**: Recent events, breaking updates, time-sensitive information
+- **📚 General Knowledge**: Historical facts, established understanding
+- **🔬 Empirical Fact**: Testable scientific claims, measurable data, research findings
+
+Different classifications use optimized scoring weights for best accuracy.
+
+## 🚀 Installation
 
 ### Prerequisites
 
-- Chrome or Chromium-based browser (Edge, Brave, etc.)
-- OpenAI API key (for AI scoring)
+- Chrome, Edge, Brave, or any Chromium-based browser
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- ~$0.01-0.05 per article in API costs
 
-### Setup Instructions
+### Quick Setup (5 minutes)
 
-1. **Clone or download this repository**
+1. **Clone or Download**
+   ```bash
+   git clone https://github.com/BenNormann/Delos.git
+   cd Delos
+   ```
 
-2. **Set up your OpenAI API key**:
-   - Open Chrome and go to `chrome://extensions/`
-   - Enable "Developer mode" (toggle in top right)
-   - Click "Load unpacked"
-   - Select this extension directory
-   - Open the browser console on any news site
-   - Run: 
-     ```javascript
-     chrome.storage.local.set({ openai_api_key: 'your-api-key-here' })
-     ```
+2. **Configure API Key**
+   
+   Create your `secrets.json` file:
+   ```bash
+   # Windows (PowerShell)
+   Copy-Item secrets.template.json secrets.json
+   
+   # Mac/Linux
+   cp secrets.template.json secrets.json
+   ```
+   
+   Edit `secrets.json` and add your OpenAI API key:
+   ```json
+   {
+     "openai_api_key": "sk-proj-your-actual-key-here"
+   }
+   ```
+   
+   > **🔒 Security**: `secrets.json` is automatically ignored by git and will never be committed
 
-3. **Load the extension**:
-   - Navigate to `chrome://extensions/`
-   - Enable "Developer mode"
-   - Click "Load unpacked"
-   - Select the extension directory
-   - The extension icon should appear in your toolbar
+3. **Load Extension**
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable **"Developer mode"** (toggle in top-right corner)
+   - Click **"Load unpacked"**
+   - Select the `Delos` directory
+   - ✅ The Delos icon should appear in your toolbar
 
-4. **Add icons** (if not already present):
-   - Place icon files (16x16, 32x32, 48x48, 128x128 PNG) in the `icons/` directory
+4. **Verify Setup**
+   - Visit any news article (e.g., [BBC News](https://www.bbc.com/news))
+   - Look for the loading indicator (lighthouse animation)
+   - Within 10-30 seconds, claims will be highlighted
+   - Check console (F12) for detailed logs
 
-## Usage
+## 📖 Usage
 
-1. **Visit a supported news site**:
-   - New York Times, Washington Post, The Guardian, BBC, CNN, etc.
-   - Or any article page (the extension will attempt to find article content)
+### Basic Workflow
 
-2. **Wait for analysis**:
-   - The extension automatically runs when the page loads
-   - Processing time: 10-30 seconds depending on article length
-   - Check browser console for progress (press F12)
+1. **Visit a News Site**
+   - Navigate to any major news outlet article
+   - Supported sites: NYT, Washington Post, The Guardian, BBC, CNN, Reuters, AP News, NPR, Bloomberg, WSJ, Fox News, and more
 
-3. **View results**:
-   - Claims are highlighted in the article text
-   - Hover over any highlight to see detailed scores
-   - Colors indicate trust level
+2. **Automatic Analysis**
+   - Delos runs automatically on page load
+   - Watch the loading indicator for progress:
+     - Analyzing article...
+     - Extracting claims...
+     - Classifying claims...
+     - Scoring claims...
+     - Highlighting claims...
+
+3. **Explore Results**
+   - **Hover** over highlighted claims to see score breakdown
+   - **Click** claims to view full source bibliography and political spectrum
+   - **Open popup** (click extension icon) to see article-level statistics
 
 ## Architecture
 
