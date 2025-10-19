@@ -1,6 +1,6 @@
-// Background service worker for Delos extension
+// Background service worker for Moneo extension
 
-console.log('Delos: Background service worker initialized');
+console.log('Moneo: Background service worker initialized');
 
 // Load API key from secrets.json on startup
 async function loadSecretsFile() {
@@ -11,12 +11,12 @@ async function loadSecretsFile() {
     if (secrets.openai_api_key && secrets.openai_api_key !== 'YOUR_OPENAI_API_KEY_HERE') {
       // Store the API key in chrome.storage
       await chrome.storage.local.set({ openai_api_key: secrets.openai_api_key });
-      console.log('Delos: API key loaded from secrets.json');
+      console.log('Moneo: API key loaded from secrets.json');
     } else {
-      console.log('Delos: No valid API key found in secrets.json');
+      console.log('Moneo: No valid API key found in secrets.json');
     }
   } catch (error) {
-    console.log('Delos: secrets.json not found (this is normal if not configured yet)');
+    console.log('Moneo: secrets.json not found (this is normal if not configured yet)');
   }
 }
 
@@ -25,16 +25,16 @@ loadSecretsFile();
 
 // Install event
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('Delos: Extension installed/updated', details.reason);
+  console.log('Moneo: Extension installed/updated', details.reason);
   
   if (details.reason === 'install') {
     // First install
-    console.log('Delos: First installation');
+    console.log('Moneo: First installation');
     // Try to load secrets file
     loadSecretsFile();
   } else if (details.reason === 'update') {
     // Extension updated
-    console.log('Delos: Extension updated to version', chrome.runtime.getManifest().version);
+    console.log('Moneo: Extension updated to version', chrome.runtime.getManifest().version);
     // Reload secrets on update
     loadSecretsFile();
   }
@@ -42,7 +42,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 // Handle messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('Delos: Message received', message);
+  console.log('Moneo: Message received', message);
   
   if (message.type === 'getApiKey') {
     // Get API key from storage
@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'setApiKey') {
     // Set API key in storage
     chrome.storage.local.set({ openai_api_key: message.apiKey }, () => {
-      console.log('Delos: API key stored');
+      console.log('Moneo: API key stored');
       sendResponse({ success: true });
     });
     return true;
@@ -68,7 +68,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       [`stats_${tabId}`]: message.stats,
       lastStats: message.stats
     }, () => {
-      console.log('Delos: Stats saved for tab', tabId);
+      console.log('Moneo: Stats saved for tab', tabId);
       sendResponse({ success: true });
     });
     return true;
@@ -77,10 +77,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'clearCache') {
     // Clear cache
     chrome.storage.local.get(null, (items) => {
-      const cacheKeys = Object.keys(items).filter(key => key.startsWith('delos_cache_'));
+      const cacheKeys = Object.keys(items).filter(key => key.startsWith('moneo_cache_'));
       if (cacheKeys.length > 0) {
         chrome.storage.local.remove(cacheKeys, () => {
-          console.log('Delos: Cache cleared', cacheKeys.length, 'entries');
+          console.log('Moneo: Cache cleared', cacheKeys.length, 'entries');
           sendResponse({ success: true, count: cacheKeys.length });
         });
       } else {
@@ -93,7 +93,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'getStats') {
     // Get extension statistics
     chrome.storage.local.get(null, (items) => {
-      const cacheKeys = Object.keys(items).filter(key => key.startsWith('delos_cache_'));
+      const cacheKeys = Object.keys(items).filter(key => key.startsWith('moneo_cache_'));
       sendResponse({
         cacheEntries: cacheKeys.length,
         hasApiKey: !!items.openai_api_key
@@ -119,7 +119,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             data = await response.text();
           }
         } catch (readError) {
-          console.error('TruthCheck: Error reading response body:', readError);
+          console.error('Moneo: Error reading response body:', readError);
           data = null;
         }
         
@@ -134,7 +134,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
           }
           
-          console.error('Delos: Fetch failed:', {
+          console.error('Moneo: Fetch failed:', {
             url: message.url,
             status: response.status,
             statusText: response.statusText,
@@ -160,7 +160,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           headers: Object.fromEntries(response.headers.entries())
         });
       } catch (error) {
-        console.error('Delos: Fetch error:', error);
+        console.error('Moneo: Fetch error:', error);
         sendResponse({ 
           success: false, 
           error: error.message,
@@ -176,7 +176,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
     // Page finished loading
-    console.log('Delos: Tab updated', tab.url);
+    console.log('Moneo: Tab updated', tab.url);
   }
 });
 

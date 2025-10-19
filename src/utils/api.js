@@ -1,4 +1,4 @@
-// OpenAI API wrapper for Delos extension
+// OpenAI API wrapper for Moneo extension
 
 const API = {
   /**

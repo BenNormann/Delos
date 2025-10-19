@@ -1,4 +1,4 @@
-// Configuration constants for TruthCheck extension
+// Configuration constants for Moneo extension
 
 const CONFIG = {
   // OpenAI

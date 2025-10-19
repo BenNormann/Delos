@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Delos",
+  "name": "Moneo",
   "version": "1.0.0",
-  "description": "Making truth visible - AI-powered fact-checking that analyzes and scores claims in news articles",
+  "description": "To warn, advise, remind - AI-powered fact-checking that analyzes and scores claims in news articles",
   "permissions": [
     "storage",
     "activeTab"
@@ -23,6 +23,7 @@
         "*://*.bbc.com/*",
         "*://*.cnn.com/*",
         "*://*.foxnews.com/*",
+        "*://*.theonion.com/*",
         "*://*.foxbusiness.com/*",
         "*://*.reuters.com/*",
         "*://*.apnews.com/*",
@@ -72,7 +73,7 @@
       "64": "icons/icon64.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "Delos - Making Truth Visible"
+    "default_title": "Moneo - To Warn, Advise, Remind"
   },
   "web_accessible_resources": [
     {

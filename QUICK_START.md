@@ -1,4 +1,4 @@
-# TruthCheck - Quick Start Guide
+# Moneo - Quick Start Guide
 
 ## 🚀 5-Minute Setup
 
@@ -59,20 +59,20 @@ chrome.storage.local.get('openai_api_key', (r) =>
 ### Clear Cache
 ```javascript
 chrome.storage.local.get(null, (items) => {
-  const keys = Object.keys(items).filter(k => k.startsWith('truthcheck_cache_'));
+  const keys = Object.keys(items).filter(k => k.startsWith('moneo_cache_'));
   chrome.storage.local.remove(keys, () => console.log('🗑️ Cleared', keys.length));
 });
 ```
 
 ### Enable Debug Mode
 ```javascript
-localStorage.setItem('truthcheck_debug', 'true');
+localStorage.setItem('moneo_debug', 'true');
 location.reload();
 ```
 
 ### Force Re-run
 ```javascript
-document.body.removeAttribute('data-truthcheck-processed');
+document.body.removeAttribute('data-moneo-processed');
 location.reload();
 ```
 
@@ -110,7 +110,7 @@ Monitor usage: https://platform.openai.com/usage
 2. ✅ API key stored correctly
 3. ✅ On a supported news site
 4. ✅ Article has substantial text (>100 chars)
-5. ✅ Console shows "TruthCheck: Extension loaded"
+5. ✅ Console shows "Moneo: Extension loaded"
 6. ✅ Internet connection active
 7. ✅ OpenAI API quota available
 
@@ -137,4 +137,8 @@ Your API key is stored locally in Chrome's secure storage. Never share your API 
 **Need help?** Check console logs (F12) for detailed error messages.
 
 **All set?** Visit a news site and start fact-checking! 🔍
+
+---
+
+**Moneo** - *To warn, advise, remind* 🏛️
 

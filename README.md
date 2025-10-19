@@ -1,4 +1,4 @@
-# Delos - Making Truth Visible
+# Moneo - To Warn, Advise, Remind
 
 An AI-powered fact-checking browser extension that automatically analyzes news articles, extracts factual claims, and scores them for credibility using multi-dimensional verification across AI analysis, academic sources, and cross-spectrum web validation.
 
@@ -59,8 +59,8 @@ Different classifications use optimized scoring weights for best accuracy.
 
 1. **Clone or Download**
    ```bash
-   git clone https://github.com/BenNormann/Delos.git
-   cd Delos
+   git clone https://github.com/BenNormann/Moneo.git
+   cd Moneo
    ```
 
 2. **Configure API Key**
@@ -87,8 +87,8 @@ Different classifications use optimized scoring weights for best accuracy.
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable **"Developer mode"** (toggle in top-right corner)
    - Click **"Load unpacked"**
-   - Select the `Delos` directory
-   - ✅ The Delos icon should appear in your toolbar
+   - Select the `Moneo` directory
+   - ✅ The Moneo icon should appear in your toolbar
 
 4. **Verify Setup**
    - Visit any news article (e.g., [BBC News](https://www.bbc.com/news))
@@ -105,7 +105,7 @@ Different classifications use optimized scoring weights for best accuracy.
    - Supported sites: NYT, Washington Post, The Guardian, BBC, CNN, Reuters, AP News, NPR, Bloomberg, WSJ, Fox News, and more
 
 2. **Automatic Analysis**
-   - Delos runs automatically on page load
+   - Moneo runs automatically on page load
    - Watch the loading indicator for progress:
      - Analyzing article...
      - Extracting claims...
@@ -140,7 +140,7 @@ Different classifications use optimized scoring weights for best accuracy.
 ### Project Structure
 
 ```
-delos/
+moneo/
 ├── manifest.json          # Extension configuration (Manifest V3)
 ├── secrets.json          # API keys (gitignored, you create this)
 ├── secrets.template.json # Template for secrets.json
@@ -260,7 +260,7 @@ Available in extension popup:
 
 ```javascript
 // Run in browser console (F12)
-localStorage.setItem('delos_debug', 'true');
+localStorage.setItem('moneo_debug', 'true');
 location.reload();
 ```
 
@@ -291,7 +291,7 @@ chrome.storage.local.get('openai_api_key', (r) =>
 **Clear Cache:**
 ```javascript
 chrome.storage.local.get(null, (items) => {
-  const keys = Object.keys(items).filter(k => k.startsWith('delos_cache_'));
+  const keys = Object.keys(items).filter(k => k.startsWith('moneo_cache_'));
   chrome.storage.local.remove(keys, () => 
     console.log(`🗑️ Cleared ${keys.length} cache entries`)
   );
@@ -300,7 +300,7 @@ chrome.storage.local.get(null, (items) => {
 
 **Force Re-Analysis:**
 ```javascript
-document.body.removeAttribute('data-truthcheck-processed');
+document.body.removeAttribute('data-moneo-processed');
 location.reload();
 ```
 
@@ -390,7 +390,7 @@ Click any highlighted claim to see:
 
 1. Edit source files in `src/`
 2. Go to `chrome://extensions/`
-3. Click reload icon on Delos extension
+3. Click reload icon on Moneo extension
 4. Refresh test page
 5. Check console for errors
 
@@ -428,8 +428,8 @@ MIT License - See LICENSE file for details
 
 ## 🤝 Support
 
-- **Issues**: [GitHub Issues](https://github.com/BenNormann/Delos/issues)
-- **Repository**: [github.com/BenNormann/Delos](https://github.com/BenNormann/Delos)
+- **Issues**: [GitHub Issues](https://github.com/BenNormann/Moneo/issues)
+- **Repository**: [github.com/BenNormann/Moneo](https://github.com/BenNormann/Moneo)
 
 ---
 

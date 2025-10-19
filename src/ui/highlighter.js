@@ -149,7 +149,7 @@ const Highlighter = {
           
           if (node.parentElement.tagName === 'SCRIPT' || 
               node.parentElement.tagName === 'STYLE' ||
-              node.parentElement.classList.contains('truthcheck-highlight')) {
+              node.parentElement.classList.contains('moneo-highlight')) {
             return NodeFilter.FILTER_REJECT;
           }
           
@@ -297,15 +297,15 @@ const Highlighter = {
     Tooltip.hide();
     
     // Remove any existing modal
-    const existingModal = document.getElementById('delos-sources-modal');
+    const existingModal = document.getElementById('moneo-sources-modal');
     if (existingModal) {
       existingModal.remove();
     }
     
     // Create modal
     const modal = document.createElement('div');
-    modal.id = 'delos-sources-modal';
-    modal.className = 'delos-modal';
+    modal.id = 'moneo-sources-modal';
+    modal.className = 'moneo-modal';
     
     const sources = claim.sources || { web: [], scholar: [], all: [] };
     const webSources = sources.web || [];
@@ -342,52 +342,52 @@ const Highlighter = {
     const rightPercent = totalWeb > 0 ? Math.round((categorized.right.length / totalWeb) * 100) : 0;
     
     modal.innerHTML = `
-      <div class="delos-modal-overlay"></div>
-      <div class="delos-modal-content">
-        <div class="delos-modal-header">
+      <div class="moneo-modal-overlay"></div>
+      <div class="moneo-modal-content">
+        <div class="moneo-modal-header">
           <h2>📚 Sources & Bibliography</h2>
-          <button class="delos-modal-close">&times;</button>
+          <button class="moneo-modal-close">&times;</button>
         </div>
         
-        <div class="delos-modal-body">
-          <div class="delos-claim-text">
+        <div class="moneo-modal-body">
+          <div class="moneo-claim-text">
             "${claim.claim}"
           </div>
           
-          <div class="delos-trust-badge ${claim.trustScore >= 7 ? 'high' : claim.trustScore >= 3 ? 'medium' : 'low'}">
+          <div class="moneo-trust-badge ${claim.trustScore >= 7 ? 'high' : claim.trustScore >= 3 ? 'medium' : 'low'}">
             Trust Score: ${claim.trustScore.toFixed(1)}/10
           </div>
           
           ${totalWeb > 0 ? `
-            <div class="delos-spectrum-section">
+            <div class="moneo-spectrum-section">
               <h3>Political Spectrum (Web Sources)</h3>
-              <div class="delos-spectrum-bar">
-                ${leftPercent > 0 ? `<div class="delos-spectrum-left" style="width: ${leftPercent}%">${leftPercent}% Left</div>` : ''}
-                ${centerPercent > 0 ? `<div class="delos-spectrum-center" style="width: ${centerPercent}%">${centerPercent}% Center</div>` : ''}
-                ${rightPercent > 0 ? `<div class="delos-spectrum-right" style="width: ${rightPercent}%">${rightPercent}% Right</div>` : ''}
+              <div class="moneo-spectrum-bar">
+                ${leftPercent > 0 ? `<div class="moneo-spectrum-left" style="width: ${leftPercent}%">${leftPercent}% Left</div>` : ''}
+                ${centerPercent > 0 ? `<div class="moneo-spectrum-center" style="width: ${centerPercent}%">${centerPercent}% Center</div>` : ''}
+                ${rightPercent > 0 ? `<div class="moneo-spectrum-right" style="width: ${rightPercent}%">${rightPercent}% Right</div>` : ''}
               </div>
             </div>
           ` : ''}
           
           ${webSources.length > 0 ? `
-            <div class="delos-sources-section">
+            <div class="moneo-sources-section">
               <h3>🌐 Web Sources (${webSources.length})</h3>
-              <div class="delos-sources-list">
+              <div class="moneo-sources-list">
                 ${this.renderSourcesByCategory(categorized)}
               </div>
             </div>
           ` : ''}
           
           ${scholarSources.length > 0 ? `
-            <div class="delos-sources-section">
+            <div class="moneo-sources-section">
               <h3>🎓 Academic Sources (${scholarSources.length})</h3>
-              <div class="delos-sources-list">
+              <div class="moneo-sources-list">
                 ${scholarSources.map(source => `
-                  <div class="delos-source-item">
+                  <div class="moneo-source-item">
                     <a href="${source.url}" target="_blank" rel="noopener">
-                      <div class="delos-source-title">${source.title}</div>
-                      <div class="delos-source-domain">${source.domain}</div>
-                      ${source.snippet ? `<div class="delos-source-snippet">${source.snippet}</div>` : ''}
+                      <div class="moneo-source-title">${source.title}</div>
+                      <div class="moneo-source-domain">${source.domain}</div>
+                      ${source.snippet ? `<div class="moneo-source-snippet">${source.snippet}</div>` : ''}
                     </a>
                   </div>
                 `).join('')}
@@ -396,7 +396,7 @@ const Highlighter = {
           ` : ''}
           
           ${webSources.length === 0 && scholarSources.length === 0 ? `
-            <div class="delos-no-sources">
+            <div class="moneo-no-sources">
               <p>No sources found for this claim</p>
             </div>
           ` : ''}
@@ -407,16 +407,16 @@ const Highlighter = {
     document.body.appendChild(modal);
     
     // Add styles if not already added
-    if (!document.getElementById('delos-modal-styles')) {
+    if (!document.getElementById('moneo-modal-styles')) {
       this.addModalStyles();
     }
     
     // Close handlers
-    modal.querySelector('.delos-modal-close').addEventListener('click', () => {
+    modal.querySelector('.moneo-modal-close').addEventListener('click', () => {
       modal.remove();
     });
     
-    modal.querySelector('.delos-modal-overlay').addEventListener('click', () => {
+    modal.querySelector('.moneo-modal-overlay').addEventListener('click', () => {
       modal.remove();
     });
     
@@ -449,14 +449,14 @@ const Highlighter = {
       const sources = categorized[cat.key];
       if (sources && sources.length > 0) {
         html += `
-          <div class="delos-category-group">
-            <div class="delos-category-label">${cat.icon} ${cat.label} (${sources.length})</div>
+          <div class="moneo-category-group">
+            <div class="moneo-category-label">${cat.icon} ${cat.label} (${sources.length})</div>
             ${sources.map(source => `
-              <div class="delos-source-item">
+              <div class="moneo-source-item">
                 <a href="${source.url}" target="_blank" rel="noopener">
-                  <div class="delos-source-title">${source.title}</div>
-                  <div class="delos-source-domain">${source.domain}</div>
-                  ${source.snippet ? `<div class="delos-source-snippet">${source.snippet}</div>` : ''}
+                  <div class="moneo-source-title">${source.title}</div>
+                  <div class="moneo-source-domain">${source.domain}</div>
+                  ${source.snippet ? `<div class="moneo-source-snippet">${source.snippet}</div>` : ''}
                 </a>
               </div>
             `).join('')}
@@ -473,9 +473,9 @@ const Highlighter = {
    */
   addModalStyles() {
     const style = document.createElement('style');
-    style.id = 'delos-modal-styles';
+    style.id = 'moneo-modal-styles';
     style.textContent = `
-      .delos-modal {
+      .moneo-modal {
         position: fixed;
         top: 0;
         left: 0;
@@ -488,7 +488,7 @@ const Highlighter = {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
       
-      .delos-modal-overlay {
+      .moneo-modal-overlay {
         position: absolute;
         top: 0;
         left: 0;
@@ -497,7 +497,7 @@ const Highlighter = {
         background: rgba(0, 0, 0, 0.7);
       }
       
-      .delos-modal-content {
+      .moneo-modal-content {
         position: relative;
         background: white;
         border-radius: 12px;
@@ -510,7 +510,7 @@ const Highlighter = {
         overflow: hidden;
       }
       
-      .delos-modal-header {
+      .moneo-modal-header {
         padding: 20px 24px;
         border-bottom: 1px solid #e5e7eb;
         display: flex;
@@ -519,14 +519,14 @@ const Highlighter = {
         background: #f9fafb;
       }
       
-      .delos-modal-header h2 {
+      .moneo-modal-header h2 {
         margin: 0;
         font-size: 20px;
         font-weight: 600;
         color: #111827;
       }
       
-      .delos-modal-close {
+      .moneo-modal-close {
         background: none;
         border: none;
         font-size: 32px;
@@ -543,17 +543,17 @@ const Highlighter = {
         transition: all 0.2s;
       }
       
-      .delos-modal-close:hover {
+      .moneo-modal-close:hover {
         background: #e5e7eb;
         color: #111827;
       }
       
-      .delos-modal-body {
+      .moneo-modal-body {
         padding: 24px;
         overflow-y: auto;
       }
       
-      .delos-claim-text {
+      .moneo-claim-text {
         font-size: 15px;
         line-height: 1.6;
         color: #374151;
@@ -565,7 +565,7 @@ const Highlighter = {
         font-style: italic;
       }
       
-      .delos-trust-badge {
+      .moneo-trust-badge {
         display: inline-block;
         padding: 8px 16px;
         border-radius: 20px;
@@ -574,26 +574,26 @@ const Highlighter = {
         margin-bottom: 20px;
       }
       
-      .delos-trust-badge.high {
+      .moneo-trust-badge.high {
         background: #d1fae5;
         color: #065f46;
       }
       
-      .delos-trust-badge.medium {
+      .moneo-trust-badge.medium {
         background: #fef3c7;
         color: #92400e;
       }
       
-      .delos-trust-badge.low {
+      .moneo-trust-badge.low {
         background: #fee2e2;
         color: #991b1b;
       }
       
-      .delos-spectrum-section {
+      .moneo-spectrum-section {
         margin-bottom: 24px;
       }
       
-      .delos-spectrum-section h3 {
+      .moneo-spectrum-section h3 {
         font-size: 14px;
         font-weight: 600;
         color: #374151;
@@ -602,7 +602,7 @@ const Highlighter = {
         letter-spacing: 0.5px;
       }
       
-      .delos-spectrum-bar {
+      .moneo-spectrum-bar {
         display: flex;
         height: 32px;
         border-radius: 6px;
@@ -611,7 +611,7 @@ const Highlighter = {
         font-weight: 600;
       }
       
-      .delos-spectrum-left, .delos-spectrum-center, .delos-spectrum-right {
+      .moneo-spectrum-left, .moneo-spectrum-center, .moneo-spectrum-right {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -619,40 +619,40 @@ const Highlighter = {
         transition: all 0.3s;
       }
       
-      .delos-spectrum-left {
+      .moneo-spectrum-left {
         background: #3b82f6;
       }
       
-      .delos-spectrum-center {
+      .moneo-spectrum-center {
         background: #8b5cf6;
       }
       
-      .delos-spectrum-right {
+      .moneo-spectrum-right {
         background: #ef4444;
       }
       
-      .delos-sources-section {
+      .moneo-sources-section {
         margin-bottom: 24px;
       }
       
-      .delos-sources-section h3 {
+      .moneo-sources-section h3 {
         font-size: 16px;
         font-weight: 600;
         color: #111827;
         margin-bottom: 12px;
       }
       
-      .delos-sources-list {
+      .moneo-sources-list {
         display: flex;
         flex-direction: column;
         gap: 12px;
       }
       
-      .delos-category-group {
+      .moneo-category-group {
         margin-bottom: 16px;
       }
       
-      .delos-category-label {
+      .moneo-category-label {
         font-size: 13px;
         font-weight: 600;
         color: #6b7280;
@@ -661,7 +661,7 @@ const Highlighter = {
         letter-spacing: 0.5px;
       }
       
-      .delos-source-item {
+      .moneo-source-item {
         background: #f9fafb;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
@@ -669,19 +669,19 @@ const Highlighter = {
         transition: all 0.2s;
       }
       
-      .delos-source-item:hover {
+      .moneo-source-item:hover {
         background: #f3f4f6;
         border-color: #8b5cf6;
         box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
       }
       
-      .delos-source-item a {
+      .moneo-source-item a {
         text-decoration: none;
         color: inherit;
         display: block;
       }
       
-      .delos-source-title {
+      .moneo-source-title {
         font-size: 14px;
         font-weight: 600;
         color: #111827;
@@ -689,19 +689,19 @@ const Highlighter = {
         line-height: 1.4;
       }
       
-      .delos-source-domain {
+      .moneo-source-domain {
         font-size: 12px;
         color: #8b5cf6;
         margin-bottom: 6px;
       }
       
-      .delos-source-snippet {
+      .moneo-source-snippet {
         font-size: 13px;
         color: #6b7280;
         line-height: 1.5;
       }
       
-      .delos-no-sources {
+      .moneo-no-sources {
         text-align: center;
         padding: 40px;
         color: #9ca3af;
@@ -716,7 +716,7 @@ const Highlighter = {
    * @returns {string} CSS class name
    */
   getHighlightClass(trustScore) {
-    const baseClass = 'truthcheck-highlight';
+    const baseClass = 'moneo-highlight';
     
     if (trustScore >= 7) {
       return `${baseClass} trust-high`;

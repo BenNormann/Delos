@@ -1,7 +1,7 @@
-// Logger utility for Delos extension
+// Logger utility for Moneo extension
 
 const Logger = {
-  prefix: 'Delos:',
+  prefix: 'Moneo:',
   
   log(...args) {
     console.log(this.prefix, ...args);
@@ -26,7 +26,7 @@ const Logger = {
   },
   
   isDebugMode() {
-    return localStorage.getItem('delos_debug') === 'true';
+    return localStorage.getItem('moneo_debug') === 'true';
   },
   
   group(label) {

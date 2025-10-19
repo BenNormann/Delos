@@ -51,8 +51,8 @@ const Tooltip = {
    */
   create(claimData) {
     const tooltip = document.createElement('div');
-    tooltip.className = 'truthcheck-tooltip';
-    tooltip.id = 'truthcheck-tooltip';
+    tooltip.className = 'moneo-tooltip';
+    tooltip.id = 'moneo-tooltip';
     
     // Determine trust level
     const trustLevel = this.getTrustLevel(claimData.trustScore);
@@ -63,20 +63,20 @@ const Tooltip = {
     
     // Build tooltip HTML
     tooltip.innerHTML = `
-      <div class="truthcheck-tooltip-header" style="background-color: ${trustColor}">
-        <div class="truthcheck-tooltip-title">
+      <div class="moneo-tooltip-header" style="background-color: ${trustColor}">
+        <div class="moneo-tooltip-title">
           📊 Trust Score: ${claimData.trustScore.toFixed(1)}/10
         </div>
-        <div class="truthcheck-tooltip-level">${trustLevel}</div>
+        <div class="moneo-tooltip-level">${trustLevel}</div>
       </div>
-      <div class="truthcheck-tooltip-body">
-        <div class="truthcheck-tooltip-section">
-          <div class="truthcheck-tooltip-label">Classification:</div>
-          <div class="truthcheck-tooltip-value">${classificationLabel}</div>
+      <div class="moneo-tooltip-body">
+        <div class="moneo-tooltip-section">
+          <div class="moneo-tooltip-label">Classification:</div>
+          <div class="moneo-tooltip-value">${classificationLabel}</div>
         </div>
-        <div class="truthcheck-tooltip-section">
-          <div class="truthcheck-tooltip-label">Score Breakdown:</div>
-          <div class="truthcheck-tooltip-scores">
+        <div class="moneo-tooltip-section">
+          <div class="moneo-tooltip-label">Score Breakdown:</div>
+          <div class="moneo-tooltip-scores">
             ${this.createScoreBar('AI Rating', claimData.scores.aiRating)}
             ${this.createScoreBar('Tone Analysis', claimData.scores.toneAnalysis)}
             ${claimData.classification === 'empirical_fact' ? 
@@ -84,14 +84,14 @@ const Tooltip = {
             ${this.createScoreBar('Web Reinforced', claimData.scores.webReinforced)}
           </div>
         </div>
-        <div class="truthcheck-tooltip-claim">
-          <div class="truthcheck-tooltip-label">Claim:</div>
-          <div class="truthcheck-tooltip-text">"${this.truncate(claimData.claim, 150)}"</div>
+        <div class="moneo-tooltip-claim">
+          <div class="moneo-tooltip-label">Claim:</div>
+          <div class="moneo-tooltip-text">"${this.truncate(claimData.claim, 150)}"</div>
         </div>
         ${claimData.note ? `
-        <div class="truthcheck-tooltip-note">
-          <div class="truthcheck-tooltip-label">Note:</div>
-          <div class="truthcheck-tooltip-text">${claimData.note}</div>
+        <div class="moneo-tooltip-note">
+          <div class="moneo-tooltip-label">Note:</div>
+          <div class="moneo-tooltip-text">${claimData.note}</div>
         </div>
         ` : ''}
       </div>
@@ -110,12 +110,12 @@ const Tooltip = {
     // Handle n/a values (string or null/undefined)
     if (score === null || score === undefined || score === 'n/a') {
       return `
-        <div class="truthcheck-score-item">
-          <div class="truthcheck-score-label">${label}:</div>
-          <div class="truthcheck-score-bar-container">
-            <div class="truthcheck-score-bar" style="width: 0%; background-color: #9ca3af"></div>
+        <div class="moneo-score-item">
+          <div class="moneo-score-label">${label}:</div>
+          <div class="moneo-score-bar-container">
+            <div class="moneo-score-bar" style="width: 0%; background-color: #9ca3af"></div>
           </div>
-          <div class="truthcheck-score-value">n/a</div>
+          <div class="moneo-score-value">n/a</div>
         </div>
       `;
     }
@@ -124,12 +124,12 @@ const Tooltip = {
     const color = this.getScoreColor(score);
     
     return `
-      <div class="truthcheck-score-item">
-        <div class="truthcheck-score-label">${label}:</div>
-        <div class="truthcheck-score-bar-container">
-          <div class="truthcheck-score-bar" style="width: ${percentage}%; background-color: ${color}"></div>
+      <div class="moneo-score-item">
+        <div class="moneo-score-label">${label}:</div>
+        <div class="moneo-score-bar-container">
+          <div class="moneo-score-bar" style="width: ${percentage}%; background-color: ${color}"></div>
         </div>
-        <div class="truthcheck-score-value">${score.toFixed(1)}/10</div>
+        <div class="moneo-score-value">${score.toFixed(1)}/10</div>
       </div>
     `;
   },

@@ -3,16 +3,16 @@
 (async function() {
   'use strict';
   
-  Logger.info('Delos extension loaded');
+  Logger.info('Moneo extension loaded');
   
   // Check if already processed
-  if (document.body.hasAttribute('data-truthcheck-processed')) {
+  if (document.body.hasAttribute('data-moneo-processed')) {
     Logger.info('Page already processed, skipping');
     return;
   }
   
   // Mark as processed
-  document.body.setAttribute('data-truthcheck-processed', 'true');
+  document.body.setAttribute('data-moneo-processed', 'true');
   
   try {
     // Wait for page to be fully loaded
@@ -95,7 +95,7 @@
     hideLoadingIndicator();
     
     // Show user-friendly error
-    showErrorNotification('Delos encountered an error. Please check your API key configuration.');
+    showErrorNotification('Moneo encountered an error. Please check your API key configuration.');
   }
 })();
 
@@ -120,14 +120,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'toggleHighlights') {
     if (message.enabled) {
       // Show highlights - restore background colors
-      const highlights = document.querySelectorAll('.truthcheck-highlight');
+      const highlights = document.querySelectorAll('.moneo-highlight');
       highlights.forEach(el => {
         el.style.backgroundColor = '';
         el.style.borderBottom = '';
       });
     } else {
       // Hide highlights - remove visual styling but keep text visible
-      const highlights = document.querySelectorAll('.truthcheck-highlight');
+      const highlights = document.querySelectorAll('.moneo-highlight');
       highlights.forEach(el => {
         el.style.backgroundColor = 'transparent';
         el.style.borderBottom = 'none';
@@ -261,14 +261,14 @@ function showLoadingIndicator(message) {
   hideLoadingIndicator();
   
   const indicator = document.createElement('div');
-  indicator.id = 'truthcheck-loading-indicator';
+  indicator.id = 'moneo-loading-indicator';
   
   // Get the lighthouse GIF URL from extension
   const lighthouseUrl = chrome.runtime.getURL('icons/lighthouse-search.gif');
   
   indicator.innerHTML = `
-    <div class="truthcheck-loading-text">${message}</div>
-    <img src="${lighthouseUrl}" class="truthcheck-loading-gif" alt="Loading">
+    <div class="moneo-loading-text">${message}</div>
+    <img src="${lighthouseUrl}" class="moneo-loading-gif" alt="Loading">
   `;
   indicator.style.cssText = `
     position: fixed;
@@ -286,13 +286,13 @@ function showLoadingIndicator(message) {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: truthcheck-slide-in 0.3s ease-out;
+    animation: moneo-slide-in 0.3s ease-out;
   `;
   
   // Add styles
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes truthcheck-slide-in {
+    @keyframes moneo-slide-in {
       from {
         transform: translateX(400px);
         opacity: 0;
@@ -303,7 +303,7 @@ function showLoadingIndicator(message) {
       }
     }
     
-    .truthcheck-loading-text {
+    .moneo-loading-text {
       line-height: 1.4;
       font-weight: 500;
       text-align: center;
@@ -311,7 +311,7 @@ function showLoadingIndicator(message) {
       margin: 0;
     }
     
-    .truthcheck-loading-gif {
+    .moneo-loading-gif {
       width: 100%;
       height: auto;
       display: block;
@@ -332,9 +332,9 @@ function showLoadingIndicator(message) {
  * @param {string} message - New loading message
  */
 function updateLoadingIndicator(message) {
-  const indicator = document.getElementById('truthcheck-loading-indicator');
+  const indicator = document.getElementById('moneo-loading-indicator');
   if (indicator) {
-    const textElement = indicator.querySelector('.truthcheck-loading-text');
+    const textElement = indicator.querySelector('.moneo-loading-text');
     if (textElement) {
       textElement.textContent = message;
     }
@@ -345,9 +345,9 @@ function updateLoadingIndicator(message) {
  * Hide loading indicator with fade out
  */
 function hideLoadingIndicator() {
-  const indicator = document.getElementById('truthcheck-loading-indicator');
+  const indicator = document.getElementById('moneo-loading-indicator');
   if (indicator) {
-    indicator.style.animation = 'truthcheck-slide-in 0.3s ease-out reverse';
+    indicator.style.animation = 'moneo-slide-in 0.3s ease-out reverse';
     setTimeout(() => {
       indicator.remove();
     }, 300);
@@ -360,7 +360,7 @@ function hideLoadingIndicator() {
  */
 function showErrorNotification(message) {
   const notification = document.createElement('div');
-  notification.className = 'truthcheck-error-notification';
+  notification.className = 'moneo-error-notification';
   notification.textContent = message;
   notification.style.cssText = `
     position: fixed;

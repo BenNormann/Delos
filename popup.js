@@ -1,4 +1,4 @@
-// Popup script for Delos extension
+// Popup script for Moneo extension
 
 // Load statistics from current tab
 async function loadStats() {

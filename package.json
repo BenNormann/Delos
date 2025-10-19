@@ -1,7 +1,7 @@
 {
-  "name": "truthcheck-extension",
+  "name": "moneo-extension",
   "version": "1.0.0",
-  "description": "Fact-checking browser extension that analyzes and scores claims in news articles",
+  "description": "To warn, advise, remind - AI-powered fact-checking browser extension that analyzes and scores claims in news articles",
   "main": "src/content.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
