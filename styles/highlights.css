@@ -1,0 +1,283 @@
+/* TruthCheck Extension Styles */
+
+/* Claim highlights */
+.truthcheck-highlight {
+  position: relative;
+  cursor: pointer;
+  padding: 2px 0;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border-bottom: 2px solid;
+}
+
+.truthcheck-highlight:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+/* Trust level colors */
+.truthcheck-highlight.trust-high,
+.truthcheck-trust-high {
+  background-color: rgba(34, 197, 94, 0.15);
+  border-bottom-color: #22c55e;
+}
+
+.truthcheck-highlight.trust-medium,
+.truthcheck-trust-medium {
+  background-color: rgba(234, 179, 8, 0.15);
+  border-bottom-color: #eab308;
+}
+
+.truthcheck-highlight.trust-low,
+.truthcheck-trust-low {
+  background-color: rgba(239, 68, 68, 0.15);
+  border-bottom-color: #ef4444;
+}
+
+/* Tooltip container */
+.truthcheck-tooltip {
+  position: absolute;
+  z-index: 999999;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1f2937;
+  overflow: hidden;
+  animation: truthcheck-tooltip-fadeIn 0.2s ease;
+}
+
+@keyframes truthcheck-tooltip-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tooltip header */
+.truthcheck-tooltip-header {
+  padding: 16px;
+  color: white;
+  font-weight: 600;
+}
+
+.truthcheck-tooltip-title {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.truthcheck-tooltip-level {
+  font-size: 12px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tooltip body */
+.truthcheck-tooltip-body {
+  padding: 16px;
+  background: white;
+}
+
+.truthcheck-tooltip-section {
+  margin-bottom: 16px;
+}
+
+.truthcheck-tooltip-section:last-child {
+  margin-bottom: 0;
+}
+
+.truthcheck-tooltip-label {
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.truthcheck-tooltip-value {
+  font-size: 14px;
+  color: #1f2937;
+}
+
+/* Score breakdown */
+.truthcheck-tooltip-scores {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.truthcheck-score-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.truthcheck-score-label {
+  font-size: 13px;
+  color: #4b5563;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.truthcheck-score-bar-container {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.truthcheck-score-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.truthcheck-score-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  min-width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Claim text in tooltip */
+.truthcheck-tooltip-claim {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.truthcheck-tooltip-text {
+  font-size: 13px;
+  color: #4b5563;
+  font-style: italic;
+  line-height: 1.6;
+  margin-top: 4px;
+}
+
+/* Note text in tooltip */
+.truthcheck-tooltip-note {
+  margin-top: 12px;
+  padding: 10px;
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 4px;
+}
+
+.truthcheck-tooltip-note .truthcheck-tooltip-label {
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.truthcheck-tooltip-note .truthcheck-tooltip-text {
+  color: #92400e;
+  font-style: normal;
+  font-size: 12px;
+}
+
+/* Error notification */
+.truthcheck-error-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ef4444;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  max-width: 300px;
+  animation: truthcheck-notification-slideIn 0.3s ease;
+}
+
+@keyframes truthcheck-notification-slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Loading indicator (optional for future use) */
+.truthcheck-loading {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.truthcheck-loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: truthcheck-spin 0.8s linear infinite;
+}
+
+@keyframes truthcheck-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .truthcheck-tooltip {
+    width: 280px;
+    font-size: 13px;
+  }
+  
+  .truthcheck-tooltip-header {
+    padding: 12px;
+  }
+  
+  .truthcheck-tooltip-body {
+    padding: 12px;
+  }
+  
+  .truthcheck-score-label {
+    min-width: 80px;
+    font-size: 12px;
+  }
+}
+
+/* Print styles - hide highlights when printing */
+@media print {
+  .truthcheck-highlight {
+    background: none !important;
+    border: none !important;
+  }
+  
+  .truthcheck-tooltip {
+    display: none !important;
+  }
+}
+

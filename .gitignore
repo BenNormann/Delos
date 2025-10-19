@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+
+# API keys (never commit these!)
+*api_key*
+config.local.js
+secrets.json
+secrets.*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Extension packaging
+*.zip
+*.crx
+*.pem
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test files
+test/
+*.test.js
+
+# Build artifacts
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
+

@@ -1,0 +1,84 @@
+{
+  "manifest_version": 3,
+  "name": "Delos",
+  "version": "1.0.0",
+  "description": "Making truth visible - AI-powered fact-checking that analyzes and scores claims in news articles",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.nytimes.com/*",
+        "*://*.washingtonpost.com/*",
+        "*://*.theguardian.com/*",
+        "*://*.bbc.com/*",
+        "*://*.cnn.com/*",
+        "*://*.foxnews.com/*",
+        "*://*.foxbusiness.com/*",
+        "*://*.reuters.com/*",
+        "*://*.apnews.com/*",
+        "*://*.npr.org/*",
+        "*://*.nbcnews.com/*",
+        "*://*.abcnews.go.com/*",
+        "*://*.cbsnews.com/*",
+        "*://*.bloomberg.com/*",
+        "*://*.wsj.com/*",
+        "*://*.ft.com/*"
+      ],
+      "js": [
+        "src/config.js",
+        "src/utils/logger.js",
+        "src/utils/cache.js",
+        "src/utils/api.js",
+        "src/scrapers/webScraper.js",
+        "src/scrapers/scholarScraper.js",
+        "src/scoring/webScorer.js",
+        "src/utils/webSearch.js",
+        "src/core/claimExtractor.js",
+        "src/core/claimClassifier.js",
+        "src/scoring/aiScorer.js",
+        "src/scoring/scholarScorer.js",
+        "src/core/claimScorer.js",
+        "src/ui/tooltip.js",
+        "src/ui/highlighter.js",
+        "src/content.js"
+      ],
+      "css": [
+        "styles/highlights.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "64": "icons/icon64.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "64": "icons/icon64.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Delos - Making Truth Visible"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["secrets.json", "icons/lighthouse-search.gif"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
+
