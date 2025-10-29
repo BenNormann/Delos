@@ -170,6 +170,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     })();
     return true; // Keep channel open for async response
   }
+  
+  if (message.type === 'RESOLVE_URL') {
+    // Resolve URL redirects (fallback for Bing URLs that can't be unwrapped)
+    (async () => {
+      try {
+        const response = await fetch(message.url, { redirect: 'follow', method: 'GET' });
+        sendResponse({ ok: true, finalUrl: response.url || message.url });
+      } catch (e) {
+        sendResponse({ ok: false, finalUrl: message.url, error: String(e) });
+      }
+    })();
+    return true; // Keep channel open for async response
+  }
 });
 
 // Handle tab updates

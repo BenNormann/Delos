@@ -40,6 +40,8 @@
         "src/utils/logger.js",
         "src/utils/cache.js",
         "src/utils/api.js",
+        "src/utils/biasResolver.js",
+        "src/utils/urlUnwrapper.js",
         "src/scrapers/webScraper.js",
         "src/scrapers/scholarScraper.js",
         "src/scoring/webScorer.js",

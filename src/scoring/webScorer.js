@@ -5,44 +5,24 @@
  * Always returns 0-10 (never "n/a")
  */
 
-// Media bias classifications based on AllSides and Media Bias/Fact Check
-const MEDIA_BIAS = {
-  left: [
-    'nytimes.com', 'washingtonpost.com', 'huffpost.com', 'huffingtonpost.com',
-    'motherjones.com', 'buzzfeednews.com', 'theguardian.com', 'msnbc.com',
-    'cnn.com', 'vox.com', 'slate.com', 'thedailybeast.com', 'thinkprogress.org',
-    'npr.org', 'pbs.org', 'politico.com', 'theatlantic.com'
-  ],
-  center: [
-    'reuters.com', 'apnews.com', 'bbc.com', 'bbc.co.uk', 'c-span.org',
-    'csmonitor.com', 'usatoday.com', 'axios.com', 'thehill.com',
-    'bloomberg.com', 'marketwatch.com', 'economist.com', 'forbes.com',
-    'time.com', 'newsweek.com', 'abcnews.go.com', 'cbsnews.com', 'nbcnews.com'
-  ],
-  right: [
-    'foxnews.com', 'foxbusiness.com', 'wsj.com', 'nationalreview.com',
-    'dailywire.com', 'breitbart.com', 'nypost.com', 'washingtontimes.com',
-    'theblaze.com', 'oann.com', 'newsmax.com', 'dailycaller.com',
-    'townhall.com', 'spectator.org', 'washingtonexaminer.com'
-  ]
-};
+// Import biasResolver (uses global scope in browser extension context)
+var BiasResolver = (typeof module !== 'undefined' && module.exports) 
+  ? require('../utils/biasResolver')  // Node.js
+  : window.BiasResolver;              // Browser (from window global)
 
 const WebScorer = {
   /**
    * Categorize a domain by political lean
+   * Uses centralized bias resolver for consistent classification
    * @param {string} domain - Domain name
    * @returns {string} 'left', 'center', 'right', or 'unknown'
    */
   categorizeDomain(domain) {
-    const normalized = domain.toLowerCase().replace(/^www\./, '');
-    
-    for (const [bias, domains] of Object.entries(MEDIA_BIAS)) {
-      if (domains.some(d => normalized.includes(d))) {
-        return bias;
-      }
+    if (!BiasResolver || typeof BiasResolver.classify !== 'function') {
+      Logger.warn('BiasResolver not available, returning unknown');
+      return 'unknown';
     }
-    
-    return 'unknown';
+    return BiasResolver.classify(domain);
   },
   
   /**

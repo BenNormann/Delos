@@ -1,5 +1,10 @@
 // Highlight claims in DOM and attach tooltips
 
+// Import biasResolver (uses global scope in browser extension context)
+var BiasResolver = (typeof module !== 'undefined' && module.exports) 
+  ? require('../utils/biasResolver')  // Node.js
+  : window.BiasResolver;              // Browser (from window global)
+
 const Highlighter = {
   highlightedElements: [],
   
@@ -311,27 +316,19 @@ const Highlighter = {
     const webSources = sources.web || [];
     const scholarSources = sources.scholar || [];
     
-    // Categorize web sources by political lean
+    // Categorize web sources by political lean using centralized resolver
     const categorized = { left: [], center: [], right: [], unknown: [] };
-    const MEDIA_BIAS = {
-      left: ['nytimes.com', 'washingtonpost.com', 'huffpost.com', 'theguardian.com', 'msnbc.com', 'cnn.com', 'vox.com', 'npr.org', 'pbs.org'],
-      center: ['reuters.com', 'apnews.com', 'bbc.com', 'bbc.co.uk', 'usatoday.com', 'axios.com', 'thehill.com', 'bloomberg.com', 'forbes.com'],
-      right: ['foxnews.com', 'foxbusiness.com', 'wsj.com', 'nationalreview.com', 'dailywire.com', 'nypost.com', 'washingtontimes.com']
-    };
     
     webSources.forEach(source => {
-      const domain = source.domain.toLowerCase();
-      let categorizedFlag = false;
-      
-      for (const [bias, domains] of Object.entries(MEDIA_BIAS)) {
-        if (domains.some(d => domain.includes(d))) {
-          categorized[bias].push(source);
-          categorizedFlag = true;
-          break;
-        }
+      if (!BiasResolver || typeof BiasResolver.classify !== 'function') {
+        categorized.unknown.push(source);
+        return;
       }
       
-      if (!categorizedFlag) {
+      const b = BiasResolver.classify(source.domain);
+      if (b === 'left' || b === 'center' || b === 'right') {
+        categorized[b].push(source);
+      } else {
         categorized.unknown.push(source);
       }
     });

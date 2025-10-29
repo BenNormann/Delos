@@ -7,6 +7,17 @@
  * Returns consistent format: [{url, title, snippet, domain}, ...]
  */
 
+// Import biasResolver (uses global scope in browser extension context)
+var BiasResolver = (typeof module !== 'undefined' && module.exports) 
+  ? require('./biasResolver')  // Node.js
+  : window.BiasResolver;        // Browser (from window global)
+
+// Debug logging
+console.log('WebSearch: BiasResolver available?', !!BiasResolver);
+if (BiasResolver) {
+  console.log('WebSearch: BiasResolver.classify available?', typeof BiasResolver.classify === 'function');
+}
+
 const WebSearch = {
   /**
    * Search general web sources
@@ -26,6 +37,15 @@ const WebSearch = {
       const results = await WebScraper.search(query, maxResults);
       
       Logger.log(`Web search returned ${results.length} results`);
+      
+      // Debug: log first few results to see what domains we're getting
+      if (results.length > 0) {
+        Logger.log('First 3 search results:');
+        results.slice(0, 3).forEach((result, i) => {
+          Logger.log(`  ${i+1}. ${result.domain} - ${result.title.substring(0, 50)}...`);
+        });
+      }
+      
       return results;
       
     } catch (error) {
@@ -129,7 +149,7 @@ const WebSearch = {
         return !domain.includes(excludeLower);
       });
       
-      // Use webScorer's domain categorization
+      // Analyze bias spectrum using centralized resolver
       const analysis = {
         total: filteredResults.length,
         left: 0,
@@ -138,65 +158,28 @@ const WebSearch = {
         unknown: 0
       };
       
-      // Import media bias data from webScorer.js
-      const MEDIA_BIAS = {
-        left: [
-          'nytimes.com', 'washingtonpost.com', 'huffpost.com', 'huffingtonpost.com',
-          'motherjones.com', 'buzzfeednews.com', 'theguardian.com', 'msnbc.com',
-          'cnn.com', 'vox.com', 'slate.com', 'thedailybeast.com', 'thinkprogress.org',
-          'npr.org', 'pbs.org', 'politico.com', 'theatlantic.com'
-        ],
-        center: [
-          'reuters.com', 'apnews.com', 'bbc.com', 'bbc.co.uk', 'c-span.org',
-          'csmonitor.com', 'usatoday.com', 'axios.com', 'thehill.com',
-          'bloomberg.com', 'marketwatch.com', 'economist.com', 'forbes.com',
-          'time.com', 'newsweek.com', 'abcnews.go.com', 'cbsnews.com', 'nbcnews.com'
-        ],
-        right: [
-          'foxnews.com', 'foxbusiness.com', 'wsj.com', 'nationalreview.com',
-          'dailywire.com', 'breitbart.com', 'nypost.com', 'washingtontimes.com',
-          'theblaze.com', 'oann.com', 'newsmax.com', 'dailycaller.com',
-          'townhall.com', 'spectator.org', 'washingtonexaminer.com'
-        ]
-      };
-      
-      // Categorize each result
+      // Categorize each result using bias resolver
+      Logger.log(`Analyzing ${filteredResults.length} sources for bias classification...`);
       for (const result of filteredResults) {
-        const domain = result.domain.toLowerCase();
-        let categorized = false;
-        
-        // Check left sources
-        for (const leftDomain of MEDIA_BIAS.left) {
-          if (domain.includes(leftDomain)) {
-            analysis.left++;
-            categorized = true;
-            break;
-          }
+        // Check if BiasResolver is available
+        if (!BiasResolver || typeof BiasResolver.classify !== 'function') {
+          Logger.warn('BiasResolver not available, all sources marked as unknown');
+          analysis.unknown++;
+          continue;
         }
         
-        if (categorized) continue;
+        // Log the domain we're trying to classify
+        Logger.log(`Classifying domain: "${result.domain}"`);
+        const b = BiasResolver.classify(result.domain);
+        Logger.log(`Domain "${result.domain}" → ${b}`);
         
-        // Check center sources
-        for (const centerDomain of MEDIA_BIAS.center) {
-          if (domain.includes(centerDomain)) {
-            analysis.center++;
-            categorized = true;
-            break;
-          }
-        }
-        
-        if (categorized) continue;
-        
-        // Check right sources
-        for (const rightDomain of MEDIA_BIAS.right) {
-          if (domain.includes(rightDomain)) {
-            analysis.right++;
-            categorized = true;
-            break;
-          }
-        }
-        
-        if (!categorized) {
+        if (b === 'left') {
+          analysis.left++;
+        } else if (b === 'center') {
+          analysis.center++;
+        } else if (b === 'right') {
+          analysis.right++;
+        } else {
           analysis.unknown++;
         }
       }

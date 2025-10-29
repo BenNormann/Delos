@@ -60,11 +60,10 @@ const WebScraper = {
           type: 'fetch',
           url: url,
           options: {
-            method: 'POST',
+            method: 'GET',
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `q=${encodedQuery}`
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
           }
         }, (response) => {
           clearTimeout(timeoutId);
@@ -77,9 +76,11 @@ const WebScraper = {
       });
       
       if (!response.success) {
+        Logger.log(`DuckDuckGo failed: ${response.status || 'error'}`);
         throw new Error(`DuckDuckGo HTTP ${response.status || 'error'}`);
       }
       
+      Logger.log(`DuckDuckGo returned ${response.data.length} characters of HTML`);
       return this.parseDuckDuckGoHTML(response.data, maxResults);
       
     } catch (error) {
@@ -101,6 +102,7 @@ const WebScraper = {
     
     // DuckDuckGo HTML uses div.result for each search result
     const resultElements = doc.querySelectorAll('div.result');
+    Logger.log(`Found ${resultElements.length} DuckDuckGo result elements`);
     
     for (let i = 0; i < Math.min(resultElements.length, maxResults); i++) {
       const element = resultElements[i];
@@ -169,7 +171,11 @@ const WebScraper = {
         chrome.runtime.sendMessage({
           type: 'fetch',
           url: url,
-          options: {}
+          options: {
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+          }
         }, (response) => {
           clearTimeout(timeoutId);
           if (chrome.runtime.lastError) {
@@ -199,12 +205,27 @@ const WebScraper = {
    * @returns {Array} Parsed results
    */
   parseBingHTML(html, maxResults) {
-    const results = [];
+    // Use global URLUnwrapper exposed by content script load order
+    const unwrapRedirect = (typeof window !== 'undefined' && window.URLUnwrapper && window.URLUnwrapper.unwrapRedirect)
+      ? window.URLUnwrapper.unwrapRedirect
+      : (u) => u;
+    
+    const rawResults = [];
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     
+    // Debug: Log the HTML structure to see what we're working with
+    Logger.log(`Bing HTML length: ${html.length} characters`);
+    
     // Bing uses li.b_algo for organic search results
     const resultElements = doc.querySelectorAll('li.b_algo');
+    Logger.log(`Found ${resultElements.length} Bing result elements`);
+    
+    // Debug: Log the first few result elements to understand the structure
+    if (resultElements.length > 0) {
+      Logger.log('First Bing result element HTML:');
+      Logger.log(resultElements[0].outerHTML.substring(0, 500) + '...');
+    }
     
     for (let i = 0; i < Math.min(resultElements.length, maxResults); i++) {
       const element = resultElements[i];
@@ -212,10 +233,18 @@ const WebScraper = {
       try {
         // Extract URL from h2 > a
         const linkElement = element.querySelector('h2 a');
-        if (!linkElement) continue;
+        if (!linkElement) {
+          Logger.log(`No h2 a found in result ${i}`);
+          continue;
+        }
         
-        const url = linkElement.getAttribute('href');
-        if (!url) continue;
+        const rawUrl = linkElement.getAttribute('href');
+        if (!rawUrl) {
+          Logger.log(`No href found in result ${i}`);
+          continue;
+        }
+        
+        Logger.log(`Bing result ${i}: href="${rawUrl}"`);
         
         // Extract title
         const title = linkElement.textContent.trim();
@@ -226,15 +255,11 @@ const WebScraper = {
           ? snippetElement.textContent.trim() 
           : '';
         
-        // Extract domain
-        const domain = this.extractDomain(url);
-        
-        if (url && title && domain) {
-          results.push({
-            url: url,
+        if (rawUrl && title) {
+          rawResults.push({
+            url: rawUrl,
             title: title,
-            snippet: snippet.substring(0, 200),
-            domain: domain
+            snippet: snippet.substring(0, 200)
           });
         }
       } catch (error) {
@@ -242,7 +267,24 @@ const WebScraper = {
       }
     }
     
-    return results;
+    // Clean the results using URL unwrapper
+    const cleanResults = rawResults
+      .map(r => {
+        const raw = r.url || r.link || r.href || '';
+        const dest = unwrapRedirect(raw);
+        let domain = '';
+        try { 
+          domain = new URL(dest).hostname.replace(/^www\./, ''); 
+        } catch (e) {
+          Logger.log(`Failed to extract domain from: ${dest}`);
+        }
+        return { ...r, url: dest, domain };
+      })
+      .filter(r => r.url && r.domain && !r.domain.endsWith('bing.com'));
+    
+    Logger.log(`Cleaned ${rawResults.length} raw results to ${cleanResults.length} valid results`);
+    
+    return cleanResults;
   },
   
   /**
